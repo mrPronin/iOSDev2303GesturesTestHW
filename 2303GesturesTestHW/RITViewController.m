@@ -19,11 +19,25 @@
 {
     [super viewDidLoad];
     
-    // tap gesture
+    // tap
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tapGesture];
+    
+    // left swipe
+    UISwipeGestureRecognizer* leftSwipeGesture = [[UISwipeGestureRecognizer alloc]
+                                                        initWithTarget:self
+                                                        action:@selector(handleLeftSwipe:)];
+    leftSwipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:leftSwipeGesture];
+    
+    // right swipe
+    UISwipeGestureRecognizer* rightSwipeGesture = [[UISwipeGestureRecognizer alloc]
+                                                  initWithTarget:self
+                                                  action:@selector(handleRightSwipe:)];
+    rightSwipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:rightSwipeGesture];
     
 }
 
@@ -54,6 +68,48 @@
                      }
                      completion:^(BOOL finished) {
                      }];
+}
+
+- (void) handleLeftSwipe:(UISwipeGestureRecognizer*)swipeGesture {
+    
+    NSLog(@"Left swipe");
+    
+    CGAffineTransform currentTransform = self.gif.transform;
+    
+    //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, - M_PI);
+    CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, - 3.14f);
+    //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, - (float)M_PI);
+    
+    [UIView animateWithDuration:2.f
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
+                     animations:^{
+                         self.gif.transform = newTransform;
+                     }
+                     completion:^(BOOL finished) {
+                     }];
+    
+    
+}
+
+- (void) handleRightSwipe:(UISwipeGestureRecognizer*)swipeGesture {
+    
+    NSLog(@"Right swipe");
+    
+    CGAffineTransform currentTransform = self.gif.transform;
+    //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, M_PI);
+    CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, 3.14f);
+    //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, (float)M_PI);
+    
+    [UIView animateWithDuration:2.f
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
+                     animations:^{
+                         self.gif.transform = newTransform;
+                     }
+                     completion:^(BOOL finished) {
+                     }];
+    
 }
 
 @end
