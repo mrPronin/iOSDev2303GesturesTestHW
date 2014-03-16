@@ -24,6 +24,15 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tapGesture];
+	
+    // double touch gesture
+    UITapGestureRecognizer* doubleTouchGesture =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleDoubleTouch:)];
+    //doubleTapGesture.numberOfTapsRequired = 2;
+    doubleTouchGesture.numberOfTouchesRequired = 2;
+    [self.view addGestureRecognizer:doubleTouchGesture];
+    [tapGesture requireGestureRecognizerToFail:doubleTouchGesture];
     
     // left swipe
     UISwipeGestureRecognizer* leftSwipeGesture = [[UISwipeGestureRecognizer alloc]
@@ -60,7 +69,7 @@
     
     //[self.gif.layer removeAllAnimations];
     
-    [UIView animateWithDuration:1.5f
+    [UIView animateWithDuration:3.f
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
@@ -69,6 +78,24 @@
                      completion:^(BOOL finished) {
                      }];
 }
+
+
+- (void) handleDoubleTouch:(UITapGestureRecognizer*)tapGesture {
+    
+    NSLog(@"Double touch: %@, animation keys: %@", NSStringFromCGPoint([tapGesture locationInView:self.view]), self.gif.layer.animationKeys);
+    
+    NSArray* animationKeys = self.gif.layer.animationKeys;
+    
+    for (NSString* animationKey in animationKeys) {
+        if ([animationKey isEqualToString:@"UIImageAnimation"]) {
+            continue;
+        }
+        
+        [self.gif.layer removeAnimationForKey:animationKey];
+    }
+
+}
+
 
 - (void) handleLeftSwipe:(UISwipeGestureRecognizer*)swipeGesture {
     
@@ -80,7 +107,7 @@
     CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, - 3.14f);
     //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, - (float)M_PI);
     
-    [UIView animateWithDuration:2.f
+    [UIView animateWithDuration:3.f
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
                      animations:^{
@@ -101,7 +128,7 @@
     CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, 3.14f);
     //CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, (float)M_PI);
     
-    [UIView animateWithDuration:2.f
+    [UIView animateWithDuration:3.f
                           delay:0
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
                      animations:^{
